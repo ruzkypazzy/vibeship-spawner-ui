@@ -1288,7 +1288,7 @@ async function postJson(url: string, payload: unknown, token?: string, extraHead
 		});
 
 		if (!response.ok) {
-			const body = await response.text().catch(() => '');
+			const body = await response.text().catch((e) => { console.error('[MissionControlRelay] response.text() failed:', e); return ''; });
 			throw new Error(`HTTP ${response.status}: ${body.slice(0, 200)}`);
 		}
 	} finally {

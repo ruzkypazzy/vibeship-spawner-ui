@@ -438,7 +438,9 @@
 			loading = s.loading;
 			error = s.error;
 		});
-		loadMissions({ limit: 200 }).catch(() => {});
+		loadMissions({ limit: 200 }).catch((err) => {
+			console.error('[MissionBoard] Failed to load missions:', err);
+		});
 		fetchRelay();
 		applyImproveUrlParams();
 		relayTimer = setInterval(fetchRelay, 4000);
@@ -621,7 +623,7 @@
 				headers: { 'Content-Type': 'application/json' },
 				body: JSON.stringify({ missionId: card.id })
 			});
-			const data = await r.json().catch(() => ({}));
+			const data = await r.json().catch((e) => { console.error('[MissionBoard] JSON parse failed:', e); return {}; });
 			if (!r.ok || data?.ok === false) {
 				throw new Error(data?.error || `HTTP ${r.status}`);
 			}
@@ -680,7 +682,7 @@
 				headers: { 'Content-Type': 'application/json' },
 				body: JSON.stringify({ missionId: card.id, async: true })
 			});
-			const data = await r.json().catch(() => ({}));
+			const data = await r.json().catch((e) => { console.error('[MissionBoard] JSON parse failed:', e); return {}; });
 			if (!r.ok || data?.ok === false) {
 				throw new Error(data?.error || `HTTP ${r.status}`);
 			}
