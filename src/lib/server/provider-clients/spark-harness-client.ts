@@ -313,7 +313,7 @@ async function submitSparkTask(input: {
 	});
 
 	if (!response.ok) {
-		const body = await response.text().catch(() => '');
+		const body = await response.text().catch((e) => { console.error('[SparkHarness] response.text() failed:', e); return ''; });
 		throw new Error(`Spark harness rejected task (HTTP ${response.status}): ${body.slice(0, 500)}`);
 	}
 
@@ -537,7 +537,7 @@ async function getSparkTaskStatus(
 ): Promise<SparkTaskStatus> {
 	const response = await fetch(`${baseUrl}/v1/tasks/${encodeURIComponent(taskId)}`, { signal });
 	if (!response.ok) {
-		const body = await response.text().catch(() => '');
+		const body = await response.text().catch((e) => { console.error('[SparkHarness] getSparkTaskStatus response.text() failed:', e); return ''; });
 		throw new Error(`Spark status request failed (HTTP ${response.status}): ${body.slice(0, 300)}`);
 	}
 	return (await response.json()) as SparkTaskStatus;

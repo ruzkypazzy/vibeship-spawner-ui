@@ -88,7 +88,7 @@ export async function executeAnthropicRequest(
 			}
 
 			if (!response.ok) {
-				const errorText = await response.text().catch(() => 'unknown error');
+				const errorText = await response.text().catch((e) => { console.error('[AnthropicClient] response.text() failed:', e); return 'unknown error'; });
 				return {
 					success: false,
 					error: `${provider.label} API error ${response.status}: ${errorText.slice(0, 500)}`,
